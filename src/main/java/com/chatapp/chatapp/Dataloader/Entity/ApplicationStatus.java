@@ -24,7 +24,7 @@ public class ApplicationStatus {
     @Column(name = "status" , length = 20)
     String status;
 
-    @Column(name = "type" , length = 20)
+    @Column(name = "type" , length = 30)
     String type;
 
     @CreationTimestamp

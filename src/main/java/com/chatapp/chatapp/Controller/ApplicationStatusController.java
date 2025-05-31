@@ -2,6 +2,9 @@ package com.chatapp.chatapp.Controller;
 
 import com.chatapp.chatapp.Dataloader.Entity.ApplicationStatus;
 import com.chatapp.chatapp.Dataloader.repository.ApplicationStatusRepository;
+import com.chatapp.chatapp.Utils.EmailService.EmailSenderUtils;
+import com.chatapp.chatapp.Utils.LoggerUtils.CaLogger;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +22,10 @@ public class ApplicationStatusController {
 
     @Autowired
     private ApplicationStatusRepository applicationStatusRepository;
+    @Autowired
+    EmailSenderUtils emailSenderUtils;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(path = "/save", produces ={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> save(@RequestBody ApplicationStatus applicationStatus){
@@ -28,7 +35,9 @@ public class ApplicationStatusController {
             applicationStatus.setUpdated(LocalDateTime.now());
 
             result=applicationStatusRepository.save(applicationStatus);
-            System.out.println("save application status "+result);
+            CaLogger.caLogs.info("save application status {}",result);
+//            emailSenderUtils.sendWelcomeEmail("idJee0001@gmail.com","Ramesh kumar","www.google.co.in");
+//            emailSenderUtils.sendWelcomeEmail(result.getType(),result.getName(),"www.google.co.in");
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
