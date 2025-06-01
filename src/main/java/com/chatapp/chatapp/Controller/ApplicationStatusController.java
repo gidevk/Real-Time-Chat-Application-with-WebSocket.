@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -35,15 +33,41 @@ public class ApplicationStatusController {
             applicationStatus.setUpdated(LocalDateTime.now());
 
             result=applicationStatusRepository.save(applicationStatus);
-            CaLogger.caLogs.info("save application status {}",result);
+            CaLogger.logs.info("save application status {}",result);
 //            emailSenderUtils.sendWelcomeEmail("idJee0001@gmail.com","Ramesh kumar","www.google.co.in");
 //            emailSenderUtils.sendWelcomeEmail(result.getType(),result.getName(),"www.google.co.in");
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            CaLogger.logs.error("save application status ",e);
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+    }
+
+    @GetMapping(path = "/get", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> get(@RequestParam Integer apId){
+        ApplicationStatus status= new ApplicationStatus();
+
+        try {
+            CaLogger.logs.info("Get ApplicationStatus started");
+            status= applicationStatusRepository.getApplicationStatusByApplicationId(apId);
+
+            CaLogger.logs.info("get application status {}",status.getStatus());
+            for (int i = 0; i < 10; i++) {
+                CaLogger.logs.info("Getting ApplicationStatus Details by using {}",apId);
+                CaLogger.logs.debug("Getting ApplicationStatus Details by using {}",apId);
+                CaLogger.logs.error("Getting ApplicationStatus Details by using {}",apId);
+                CaLogger.logs.warn("Getting ApplicationStatus Details by using {}",apId);
+                CaLogger.logs.trace("Getting ApplicationStatus Details by using {}",apId);
+                System.out.println("Fetching done!");
+                CaLogger.redirectSystemOutToLogger();
+            }
+            return new ResponseEntity<>(status, HttpStatus.OK);
+        } catch (Exception e) {
+            CaLogger.logs.error("get application status ",e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }

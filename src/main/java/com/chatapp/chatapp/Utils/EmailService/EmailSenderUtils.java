@@ -27,7 +27,7 @@ public class EmailSenderUtils {
 
     public void sendEmailWithAttachment(String to, String subject, String body, File attachment) {
         try {
-            CaLogger.caLogs.info("this is sendEmailWithAttachment class");
+            CaLogger.logs.info("this is sendEmailWithAttachment class");
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true); // 'true' indicates multipart message
@@ -37,13 +37,13 @@ public class EmailSenderUtils {
             helper.setText(body);
 
             if (attachment != null && attachment.exists()) {
-                CaLogger.caLogs.info("Attachment Name {} And Attachment {}",attachment.getName(), attachment);
+                CaLogger.logs.info("Attachment Name {} And Attachment {}",attachment.getName(), attachment);
                 helper.addAttachment(attachment.getName(), attachment);
             }
 
             javaMailSender.send(message);
         } catch (Exception e) {
-CaLogger.caLogs.error("Exception Occurred in sendEmailWithAttachment ",e);        }
+CaLogger.logs.error("Exception Occurred in sendEmailWithAttachment ",e);        }
     }
 
 
@@ -72,7 +72,7 @@ CaLogger.caLogs.error("Exception Occurred in sendEmailWithAttachment ",e);      
 
     public void sendEmailWithTemplateAndAttachment(String to, String subject , String template, File attachment) {
         try {
-            CaLogger.caLogs.info("Sending a sendOtpOnEmail mail to "+ to );
+            CaLogger.logs.info("Sending a sendOtpOnEmail mail to "+ to );
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -82,14 +82,14 @@ CaLogger.caLogs.error("Exception Occurred in sendEmailWithAttachment ",e);      
             helper.setText(template, true); // Set HTML to true
 
             if (attachment != null && attachment.exists()) {
-                CaLogger.caLogs.info("Attachment Name {} And Attachemnt {}",attachment.getName(), attachment);
+                CaLogger.logs.info("Attachment Name {} And Attachemnt {}",attachment.getName(), attachment);
                 helper.addAttachment(attachment.getName(), attachment);
             }
 
             javaMailSender.send(message);
-            CaLogger.caLogs.info("sendOtpOnEmail sent successfully");
+            CaLogger.logs.info("sendOtpOnEmail sent successfully");
         } catch (MessagingException e) {
-            CaLogger.caLogs.error("Exception occurred in Email sender ",e);
+            CaLogger.logs.error("Exception occurred in Email sender ",e);
         }
 
     }
