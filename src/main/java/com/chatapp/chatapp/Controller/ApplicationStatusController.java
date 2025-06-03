@@ -53,7 +53,7 @@ public class ApplicationStatusController {
             status= applicationStatusRepository.getApplicationStatusByApplicationId(apId);
 
             CaLogger.logs.info("get application status {}",status.getStatus());
-            for (int i = 0; i < 10; i++) {
+            /*for (int i = 0; i < 10; i++) {
                 CaLogger.logs.info("Getting ApplicationStatus Details by using {}",apId);
                 CaLogger.logs.debug("Getting ApplicationStatus Details by using {}",apId);
                 CaLogger.logs.error("Getting ApplicationStatus Details by using {}",apId);
@@ -61,7 +61,7 @@ public class ApplicationStatusController {
                 CaLogger.logs.trace("Getting ApplicationStatus Details by using {}",apId);
                 System.out.println("Fetching done!");
                 CaLogger.redirectSystemOutToLogger();
-            }
+            }*/
             return new ResponseEntity<>(status, HttpStatus.OK);
         } catch (Exception e) {
             CaLogger.logs.error("get application status ",e);
