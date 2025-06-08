@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlingUtils {
 
-    public static final String PROJECT_ERROR_CODE= "CAP_001";
+    public static final String PROJECT_ERROR_CODE= "ERR_001";
     private static final String EXCEPTION_OCCURRED = "Exception Occurred";
 
     @ExceptionHandler(Throwable.class)

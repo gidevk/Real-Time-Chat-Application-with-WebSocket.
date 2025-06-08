@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
 @RequestMapping(path = "/application")
 public class ApplicationStatusController {
 
