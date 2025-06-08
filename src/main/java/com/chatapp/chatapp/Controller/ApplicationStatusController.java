@@ -3,6 +3,7 @@ package com.chatapp.chatapp.Controller;
 import com.chatapp.chatapp.Dataloader.Entity.ApplicationStatus;
 import com.chatapp.chatapp.Dataloader.repository.ApplicationStatusRepository;
 import com.chatapp.chatapp.Utils.EmailService.EmailSenderUtils;
+import com.chatapp.chatapp.Utils.ExceptionHandlingUtils.ChatAppException;
 import com.chatapp.chatapp.Utils.LoggerUtils.CaLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,20 +40,25 @@ public class ApplicationStatusController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             CaLogger.logs.error("save application status ",e);
-            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ChatAppException("Exception occurred in Save ApplicationStatus controller",e.getCause());
+//            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
 
     @GetMapping(path = "/get", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> get(@RequestParam Integer apId){
-        ApplicationStatus status= new ApplicationStatus();
+        ApplicationStatus status= null;
 
         try {
             CaLogger.logs.info("Get ApplicationStatus started");
             status= applicationStatusRepository.getApplicationStatusByApplicationId(apId);
 
-            CaLogger.logs.info("get application status {}",status.getStatus());
+            if (status == null || status.getStatus() == null) {
+                throw new ChatAppException("Application Status not found for "+apId);
+            }else {
+                CaLogger.logs.info("get application status {}", status.getStatus());
+            }
             /*for (int i = 0; i < 10; i++) {
                 CaLogger.logs.info("Getting ApplicationStatus Details by using {}",apId);
                 CaLogger.logs.debug("Getting ApplicationStatus Details by using {}",apId);
@@ -63,9 +69,16 @@ public class ApplicationStatusController {
                 CaLogger.redirectSystemOutToLogger();
             }*/
             return new ResponseEntity<>(status, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (ChatAppException e) {
             CaLogger.logs.error("get application status ",e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ChatAppException(e.getMessage());
+
+        }catch (Exception e) {
+            CaLogger.logs.error("get application status ",e);
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ChatAppException("Exception occurred in Get ApplicationStatus controller",e.getCause());
+
         }
 
     }
